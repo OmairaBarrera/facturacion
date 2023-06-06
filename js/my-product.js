@@ -13,8 +13,9 @@ export class myProduct extends HTMLElement{
         this.amount.value++;
     }
     resAmount() {
+        this.container =  document.querySelector(".products")
         this.amount = document.querySelector("#amount");
-        this.amount.value == 0 ? null : this.amount.value--;
+        this.amount.value == 0 ? this.container.remove() : this.amount.value--;
     }
     connectedCallback(){
         this.components().then(html=>{
