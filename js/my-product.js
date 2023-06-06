@@ -3,15 +3,28 @@ import styles from "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootst
 export class myProduct extends HTMLElement{
     constructor(){
         super();
+        document.adoptedStyleSheets.push(styles);
     }
     async components(){
         return await ( await fetch("view/my-product.html")).text();
     }
+    sumAmount() {
+        this.amount = document.querySelector("#amount");
+        this.amount.value++;
+    }
+    resAmount() {
+        this.amount = document.querySelector("#amount");
+        this.amount.value == 0 ? null : this.amount.value--;
+    }
     connectedCallback(){
-        document.adoptedStyleSheets.push(styles);
         this.components().then(html=>{
             this.innerHTML=html;
+            this.btn = document.querySelector("#btn-sum");
+            this.btn.addEventListener("click", this.sumAmount);
+            this.btn = document.querySelector("#btn-res");
+            this.btn.addEventListener("click", this.resAmount);
         })
+        
     }
 }
 customElements.define("my-product",myProduct);
