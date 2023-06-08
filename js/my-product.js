@@ -8,36 +8,33 @@ export class myProduct extends HTMLElement {
   async components() {
     return await (await fetch("view/my-product.html")).text();
   }
-  //modificar esta parte del codigo ya que no funciona cuando se clona el elemento
-  /* sumAmount() {
-        this.amount = document.querySelector(".amount");
-        this.amount.value++;
-    }
-    resAmount() {
-        this.container =  document.querySelector(".products")
-        this.amount = document.querySelector(".amount");
-        this.amount.value == 0 ? this.container.remove() : this.amount.value--;
-    } */
-  operaciones(e) {
-    this.amount = document.querySelector("#amount");
-    let btn = e.target.nodeName;
-    if (btn == "BUTTON") {
-      e.target.textContent === "+" ? this.amount.value++ : null;
-      e.target.textContent === "-"
-        ? this.amount.value == 0
-          ? e.target.parentNode.parentNode.parentNode.remove()
-          : this.amount.value--
-        : false;
+  selection(e) {
+    let $ = e.target;
+    if ($.nodeName == "BUTTON") {
+        let box = e.target.parentNode.parentNode;
+        let inputs = box.querySelectorAll(`input`);
+        if ($.innerHTML == "-") {
+            inputs.forEach(element => {
+                if (element.name == "amount" && element.value == 0) {
+                    box.parentNode.remove();
+                } else if (element.name == "amount") {
+                    element.value--;
+                }
+            });
+        } else if ($.innerHTML == "+") {
+            inputs.forEach(element => {
+                if (element.name == "amount") {
+                    element.value++;
+                }
+            });
+        }
     }
   }
   connectedCallback() {
     this.components().then((html) => {
       this.innerHTML = html;
-      this.container = document.querySelector(".products");
-      this.container.addEventListener("click", this.operaciones);
-      /* this.btnSum.addEventListener("click", this.sumAmount);
-            this.btnRes = document.querySelector(".btn-res");
-            this.btnRes.addEventListener("click", this.resAmount); */
+      this.container = document.querySelector("#products");
+      this.container.addEventListener("click", this.selection);
     });
   }
 }
